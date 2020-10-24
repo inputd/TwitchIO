@@ -337,7 +337,7 @@ class Context(Messageable):
 
 class NoticeSubscription:
     """
-    The Dataclass sent to `event_usernotice_subscription` events.
+    The Dataclass sent to `event_usernotice_subscription` and 'event_usernotice_sub_gifted' events.
 
     Attributes
     ------------
@@ -363,14 +363,18 @@ class NoticeSubscription:
     sub_plan_name : str
         The display name of the subscription plan.
         This may be a default name or one created by the channel owner.
+    recipient_name: str
+        The display name of the person being gifted a subscription. Will be 'The Channel' if it was gifted to the channel
+    recipient_id: int
+       The user ID that was gifted the subscription. If recipient was the channel, ID will be 00000000
     """
 
-    def __init__(self, *, channel: Channel, user: User, tags: dict):
+    def __init__(self, *, channel: Channel, user: User, tags: dict, recipient=None):
         self.channel = channel
         self.user = user
 
         self.tags = tags
-
+        self.recipient = recipient
         self.cumulative_months = tags.get('msg-param-cumulative-months', None)
         if self.cumulative_months:
             self.cumulative_months = int(self.cumulative_months)
@@ -383,3 +387,10 @@ class NoticeSubscription:
 
         self.sub_plan = tags['msg-param-sub-plan']
         self.sub_plan_name = tags['msg-param-sub-plan-name']
+        
+        if recipient:
+            self.recipient_name = recipient[0]
+            self.recipient_id = recipient[1]
+            
+            
+        
