@@ -739,6 +739,20 @@ class Bot(Client):
             For ease of use, this contains a :class:`.User` and :class:`.Channel`.
         """
         pass
+    
+    async def event_usernotice_sub_gifted(self, metadata):
+        """|coro|
+
+        Event called when a USERNOTICE gifted subscription (anonymous or otherwise) event is received from Twitch.
+
+        Parameters
+        ------------
+        metadata: :class:`twitchio.dataclasses.NoticeSubscription`
+            The object containing various metadata about the subscription event.
+            For ease of use, this contains a :class:`.Channel`. 
+            If donator is not anoymous, it will also contain a :class:`.User`. Otherwise, user will be a string 'Anonymous'
+        """
+        pass    
 
     async def event_part(self, user):
         """|coro|
