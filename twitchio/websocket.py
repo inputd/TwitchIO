@@ -501,6 +501,23 @@ class WebsocketConnection:
                 notice = NoticeSubscription(channel=channel, user=user, tags=tags)
 
                 await self._dispatch('usernotice_subscription', notice)
+                
+            elif tags['msg-id'] in ('subgift', 'anonsubgift'):
+                if tags[login'] == channel.name:
+                    user = "Anonymous"
+                else:
+                    author = tags['login']
+                    user = User(author=author, channel=channel, tags=tags, ws=self._websocket)
+                try:
+                    recipient_display = tags['msg-param-recipient-display-name']
+                    recipient_id = tags['msg-param-recipient-id']
+                    recipient = (recipient_display, recipient_id)
+                except:
+                    recipient = ("The Channel", 00000000)
+                
+                notice = NoticeGiftedSubscription(channel=channel, user=user, tags=tags, recipient=recipient)
+                        
+                await self._dispatch('usernotice_sub_gifted', notice)                        
 
         elif action == 'USERSTATE':
             log.debug('ACTION:: USERSTATE')
